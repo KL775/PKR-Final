@@ -40,7 +40,7 @@ class Product(models.Model):
     productDescription = models.CharField(max_length=128)
     quantityInStock = models.IntegerField()
     buyPrice = models.IntegerField()
-    MSRP = models.IntegerField()
+    MSRP = models.IntegerField(blank=True, null=True)
     def __str__(self):
         return self.productCode
 
