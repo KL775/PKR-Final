@@ -26,21 +26,21 @@ class UserProfile(models.Model):
 
 class ProductLine(models.Model):
     productLine = models.CharField(primary_key=True, max_length=128, unique=True)
-    textDescription = models.TextField()
-    htmlDescription = models.TextField()
-    image = models.ImageField()
+    textDescription = models.TextField(blank=True, null=True)
+    htmlDescription = models.TextField(blank=True, null=True)
+    image = models.ImageField(blank=True, null=True)
     def __str__(self):
-        return self.ProductLine
+        return self.productLine
 
 class Product(models.Model):
     productCode = models.CharField(primary_key=True, max_length=128, unique=True)
     productName = models.CharField(max_length=128)
     productLine = models.ForeignKey(ProductLine)
-    productScale = models.CharField(max_length=128)
-    productDescription = models.CharField(max_length=128)
+    productScale = models.CharField(max_length=128, null=True, blank=True)
+    productDescription = models.TextField(blank=True, null=True)
     quantityInStock = models.IntegerField()
-    buyPrice = models.IntegerField()
-    MSRP = models.IntegerField(blank=True, null=True)
+    buyPrice = models.FloatField()
+    MSRP = models.FloatField(blank=True, null=True)
     def __str__(self):
         return self.productCode
 
