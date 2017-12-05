@@ -6,7 +6,6 @@ django.setup()
 
 #Fake POP
 import random
-from django.http import JsonResponse
 import pkr_user.models as models
 from faker import Faker
 import uuid
@@ -49,16 +48,11 @@ def createStocks(stocks=5):
     new.save()
 
 if __name__ == '__main__':
+    # p = models.Product.objects.values_list('productCode', 'customerNumber').order_by('?').first()
+    # c = models.Customer.objects.get(customerNumber=p[1])
+    # stock = models.Stock.objects.get(productCode=p, customerNumber=c)
      print("Populating product lines!")
      for n in range(20):
         createProducts()
         createStocks()
      print("Populating product lines complete!!")
-
-def items(): # GET endpoint should work in dashboard.html
- #query db to get table of (itemID, itemName) tuples
- items = models.Product.objects.values_list('productCode', 'productName')
- out = []
- for item in items:
-   out.append({"id": item['productCode'], "name": item['productName']})
- return JsonResponse({"arr": out})

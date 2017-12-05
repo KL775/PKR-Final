@@ -1,5 +1,6 @@
 from django.shortcuts import render
 import pkr_user.forms as forms
+import pkr_user.models as models
 from pkr_user.models import UserProfile
 # Extra Imports for the Login and Logout Capabilities
 from django.contrib.auth import authenticate, login, logout
@@ -7,6 +8,7 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
 from django.utils import timezone
+from django.http import JsonResponse
 import uuid
 
 def home(request):
@@ -67,3 +69,34 @@ def user_login(request):
 def user_logout(request):
     logout(request)
     return HttpResponseRedirect(reverse('home'))
+
+def items(request): # GET endpoint should work in dashboard.html
+    #query db to get table of (itemID, itemName) tuples
+    current_user = request.user
+    if request.user.is_authenticated():
+        profile = models.UserProfile.objects.values_list('customerNumber').get(user=current_user)
+        curr_customer = models.Customer.objects.get(customerNumber=profile[0])
+        items = models.Product.objects.values_list('productCode', 'productName').filter(customerNumber=curr_customer).distinct('productName')
+        out = []
+        for item in items:
+            out.append({"id": item[0], "name": item[1]})
+        return JsonResponse({"arr": out})
+    else:
+        return JsonResponse({"arr": [{}]})
+
+def items_request(request):
+    current_user = request.user
+    product_code = request.META['QUERY_STRING'].split("=")[1]
+    product = models.Product.objects.get(productCode=product_code)
+    if request.user.is_authenticated():
+        profile = models.UserProfile.objects.values_list('customerNumber').get(user=current_user)
+        curr_customer = models.Customer.objects.get(customerNumber=profile[0])
+        print(curr_customer)
+        stocks = models.Stock.objects.values_list('productCode', 'dateRecord', 'quantity').filter(customerNumber=curr_customer, productCode=product)
+        out = []
+        print(stocks)
+        for item in stocks:
+            out.append({ "date": item[1], "quantity" : item[2]})
+        return JsonResponse({"arr": out})
+    else:
+        return JsonResponse({"arr": [{}]})

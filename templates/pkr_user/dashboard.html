@@ -1,5 +1,6 @@
 {% extends 'pkr_user/base.html' %}
-{% block block_body %}
+
+{% block script_block %}
 
 <script>
   var items = null; // List of items in the user's inventory
@@ -10,12 +11,11 @@
                                               // id (the id number of the item)
     .then(res => res.json())
     .then(items => {
-
       var list = document.getElementById("itemsContainer") // clear out the list if it exists already
       while (list.firstChild)
         list.removeChild(list.firstChild);
 
-      items.forEach((item) => {                    // for each item returned, make a div to be added to the sidebar
+      items.arr.forEach((item) => {                    // for each item returned, make a div to be added to the sidebar
         var row = document.createElement("div");
         row.id = item.id;
         row.classList.add("itemRow");
@@ -33,13 +33,28 @@
   function loadChart(id) {
     // Make a call to the endpoint to get info about an item and use that info to generate/display chart and put it in #chartDiv
     // for now, just printing the id of the item clicked
+    fetch('/request_items?id=' + str(id), {credentials: "include"})
+    .then(res => res.json())
+    .then(data => {
+      var list = document.getElementById("itemsContainer") // clear out the list if it exists already
+      while (list.firstChild)
+        list.removeChild(list.firstChild);
+
+      data.arr.forEach((entry) => {
+        // entry.date
+        // entry.count
+      });
+    });
     console.log(id)
   }
-
+  console.log("ok")
   window.addEventListener('load', e => getItems()); // get list when page is loaded
 </script>
-<h1 style="margin-left: auto;">Dashboard</h1>
+{% endblock %}
+
+{% block body_block %}
 <div class="container content row">
+  <h1 style="margin-left: auto;">Dashboard</h1>
   <div style="text-align:center; position: relative; max-width:384px; margin: 0 auto;">
     <div style="border-left: 1px solid #eee; width: 1px; position: absolute; left: 45px; height: 100%;"></div>
   </div>
