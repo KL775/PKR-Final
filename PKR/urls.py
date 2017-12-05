@@ -22,4 +22,5 @@ urlpatterns = [
     url(r'^user/', include('pkr_user.urls')),
     url(r'^admin/', admin.site.urls),
     url(r'^logout/', user_views.user_logout, name="logout"),
+    url(r'^dashboard/', user_views.dashboard, name = 'dashboard')
 ]

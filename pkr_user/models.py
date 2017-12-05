@@ -33,6 +33,8 @@ class ProductLine(models.Model):
         return self.productLine
 
 class Product(models.Model):
+    class Meta():
+        unique_together = (('customerNumber', 'productCode'),)
     productCode = models.CharField(primary_key=True, max_length=128, unique=True)
     productName = models.CharField(max_length=128)
     productLine = models.ForeignKey(ProductLine)
@@ -41,6 +43,7 @@ class Product(models.Model):
     quantityInStock = models.IntegerField()
     buyPrice = models.FloatField()
     MSRP = models.FloatField(blank=True, null=True)
+    customerNumber = models.ForeignKey(Customer, null=True, default='')
     def __str__(self):
         return self.productCode
 
@@ -73,27 +76,11 @@ class Payment(models.Model):
     def __str__(self):
         return self.customerNumber
 
-class Office(models.Model):
-    officeCode = models.IntegerField(primary_key=True, unique=True)
-    phone = models.CharField(max_length=15)
-    addressOne = models.CharField(max_length=128)
-    addressTwo = models.CharField(max_length=128, blank=True, null=True)
-    city = models.CharField(max_length=64)
-    postalCode = models.CharField(max_length=8)
-    country = models.CharField(max_length=64)
-    territory = models.CharField(max_length=64)
+class Stock(models.Model):
+    customerNumber = models.ForeignKey(Customer)
+    dateRecord = models.DateField()
+    productCode = models.ForeignKey(Product)
+    quantity = models.IntegerField()
 
     def __str__(self):
-        return str(self.officeCode)
-
-class Employee(models.Model):
-    employeeNumber = models.CharField(primary_key=True, max_length=128, unique=True)
-    lastName = models.CharField(max_length=128)
-    firstName = models.CharField(max_length=128)
-    extension = models.IntegerField()
-    email = models.EmailField()
-    officeCode = models.ForeignKey(Office)
-    reportsTo = models.ForeignKey("self")
-    jobTitle = models.CharField(max_length=128)
-    def __str__(self):
-        return self.employeeNumber
+        return str(self.customerNumber) + " " + str(self.productCode)

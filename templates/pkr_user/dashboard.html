@@ -1,0 +1,54 @@
+{% extends 'pkr_user/base.html' %}
+{% block block_body %}
+
+<script>
+  var items = null; // List of items in the user's inventory
+
+  function getItems() {
+    fetch('/items', {credentials: "include"}) // endpoint should return a list of js objects with 2 attributes for each:
+                                              // name (the name of the item) and
+                                              // id (the id number of the item)
+    .then(res => res.json())
+    .then(items => {
+
+      var list = document.getElementById("itemsContainer") // clear out the list if it exists already
+      while (list.firstChild)
+        list.removeChild(list.firstChild);
+
+      items.forEach((item) => {                    // for each item returned, make a div to be added to the sidebar
+        var row = document.createElement("div");
+        row.id = item.id;
+        row.classList.add("itemRow");
+        row.appendChild(document.createTextNode(item.name));
+        row.href = "#";
+        row.addEventListener('click', e => loadChart(parseInt(row.id, 10))); // when div clicked, connect to server to get information needed to build chart
+
+        link = document.createElement("a")
+        link.appendChild(row)
+        list.appendChild(link)
+      });
+    });
+  }
+
+  function loadChart(id) {
+    // Make a call to the endpoint to get info about an item and use that info to generate/display chart and put it in #chartDiv
+    // for now, just printing the id of the item clicked
+    console.log(id)
+  }
+
+  window.addEventListener('load', e => getItems()); // get list when page is loaded
+</script>
+<h1 style="margin-left: auto;">Dashboard</h1>
+<div class="container content row">
+  <div style="text-align:center; position: relative; max-width:384px; margin: 0 auto;">
+    <div style="border-left: 1px solid #eee; width: 1px; position: absolute; left: 45px; height: 100%;"></div>
+  </div>
+  <br>
+  <div id="itemsContainer" class="col-md-3">
+    <div>Placeholder</div>
+  </div>
+  <div id="chartContainer" class="col-md-8">
+    <div id="chartDiv"></div>
+  </div>
+</div>
+{% endblock %}

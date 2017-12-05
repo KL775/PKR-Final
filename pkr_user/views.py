@@ -12,6 +12,9 @@ import uuid
 def home(request):
     return render(request, 'pkr_user/home.html')
 
+def dashboard(request):
+    return render(request, 'pkr_user/dashboard.html')
+
 def register(request):
     registered = False
     if request.method == 'POST':

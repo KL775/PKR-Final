@@ -1,0 +1,52 @@
+.flex{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#banner img{
+  width: 100%;
+}
+
+#info{
+
+}
+
+.auth-btn {
+  background-color: #4CAF50;
+  color: white;
+  padding: 14px 20px;
+  margin: 8px 0;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+.jumbo-main {
+  margin: 0 auto;
+  background-image: url("https://www.handshake.com/blog/wp-content/uploads/2015/07/inventory-management-techniques-1024x579.jpg");
+  background-size: 100% 100%;
+  color: #eee;
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+}
+
+.jumbo-main p {
+  font-size: 2em;
+  text-shadow: 2px 2px black;
+}
+
+.container.content p {
+  font-size: 1.3em;
+}
+
+/*
+.jumbo-main p {
+  position: absolute;
+  bottom: 0;
+  right: 3%;
+}*/
