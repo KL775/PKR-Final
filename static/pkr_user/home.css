@@ -28,9 +28,15 @@
 }
 
 #welcome-banner {
-  border: 1px solid rgba(0, 0, 0, 0.6);
-  border-color: #ee5f5b;
+  -webkit-box-shadow:inset 0px 0px 0px 1px #ee5f5b;
+  -moz-box-shadow:inset 0px 0px 0px 1px #ee5f5b;
+  box-shadow:inset 0px 0px 0px 1px #ee5f5b;
   color: #ee5f5b;
+}
+
+img.logo {
+  max-width: 25%;
+  height: auto;
 }
 
 .jumbo-main {
@@ -71,7 +77,7 @@ body {
   font-size: 1.5em;
   font-weight: 500;
   line-height: 1.5;
-  color: #aaa;
+  color: #f1f1f1;
   text-align: left;
   background-color: #272B30;
 }
