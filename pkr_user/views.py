@@ -91,16 +91,18 @@ def items_request(request):
     current_user = request.user
     product_code = request.META['QUERY_STRING'].split("=")[1]
     product = models.Product.objects.get(productCode=product_code)
-    response = HttpResponse(content_type='text/csv')
-    response['Content-Disposition'] = 'attachment; filename="data.csv"'
-    print(response)
-    writer = csv.writer(response)
-    writer.writerow(['dateRecord', 'quantity'])
+    #response = HttpResponse(content_type='text/csv')
+    #response['Content-Disposition'] = 'attachment; filename="data.csv"'
+    #print(response)
+    #writer = csv.writer(response)
+    #writer.writerow(['dateRecord', 'quantity'])
+    output = []
     if request.user.is_authenticated():
         profile = models.UserProfile.objects.values_list('customerNumber').get(user=current_user)
         curr_customer = models.Customer.objects.get(customerNumber=profile[0])
-        print(curr_customer)
+        #print(curr_customer)
         stocks = models.Stock.objects.values_list('productCode', 'dateRecord', 'quantity').filter(customerNumber=curr_customer, productCode=product)
         for item in stocks:
-            writer.writerow([item[1], item[2]])
-    return response
+            output.append({"dateRecord": item[1], "quantity": item[2]})
+            #writer.writerow([item[1], item[2]])
+    return JsonResponse({"output": output})

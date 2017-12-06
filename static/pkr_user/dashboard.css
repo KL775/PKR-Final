@@ -1,0 +1,23 @@
+#chartContainer svg{
+  border: 1px solid steelblue;
+}
+
+path {
+    stroke: steelblue;
+    stroke-width: 2;
+    fill: none;
+}
+
+.axis path,
+.axis line {
+    fill: none;
+    stroke: #f1f1f1;
+    stroke-width: 1;
+    shape-rendering: crispEdges;
+}
+
+.x_axis, .y_axis{
+  stroke: #f1f1f1;
+  fill: none;
+  stroke-width: 0.5;
+}
