@@ -8,10 +8,6 @@
   width: 100%;
 }
 
-#info{
-
-}
-
 .auth-btn {
   background-color: #4CAF50;
   color: white;
@@ -22,6 +18,19 @@
   width: 100%;
   padding-top: 10px;
   padding-bottom: 10px;
+}
+
+.jumbotron {
+  padding: 2rem 1rem;
+  margin-bottom: 2rem;
+  background-color: #1c1e22;
+  border-radius: 0.2rem;
+}
+
+#welcome-banner {
+  border: 1px solid rgba(0, 0, 0, 0.6);
+  border-color: #ee5f5b;
+  color: #ee5f5b;
 }
 
 .jumbo-main {
@@ -44,9 +53,29 @@
   font-size: 1.3em;
 }
 
-/*
-.jumbo-main p {
-  position: absolute;
-  bottom: 0;
-  right: 3%;
-}*/
+.navbar-brand {
+  font-size: 1.6em;
+}
+
+html {
+  font-family: sans-serif;
+  line-height: 1.15;
+  -webkit-text-size-adjust: 100%;
+  -ms-text-size-adjust: 100%;
+  -ms-overflow-style: scrollbar;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  margin: 0;
+  font-size: 1.5em;
+  font-weight: 500;
+  line-height: 1.5;
+  color: #aaa;
+  text-align: left;
+  background-color: #272B30;
+}
+
+ul {
+  list-style-type: circle;
+}

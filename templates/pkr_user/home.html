@@ -6,13 +6,32 @@
 
 {% block body_block %}
 <div class="container">
+  <div class="jumbotron" id="welcome-banner">
+    <center>
+    	{% if user.is_authenticated %}
+        	<h4>Welcome back, {{ user.username }}!</h3>
+    	{% else %}
+        	<h4>Register now to see what PKR can do for you.</h3>
+    	{% endif %}
+    </center>
+  </div>
   <div class="jumbotron">
-    <h2>PKR - Inventory Management</h2>
-    {% if user.is_authenticated %}
-        <h3>Welcome {{ user.username }}!</h3>
-    {% else %}
-        <h3>Welcome to the site!</h3>
-    {% endif %}
+    <center>
+        <h1>PKR</h1>
+        <h2>Inventory Management Made Simple</h2>
+    </center>
+  </div>
+  <div class="jumbotron">
+    <center>
+        <h2>Feature Rich</h2>
+	<h3>Price Comparisons</h3>
+	<h3>Data Reporting</h3>
+    </center>
+  </div>
+  <div class="jumbotron">
+      <h3>Manage anytime, anywhere.</h3>
+      <h4>As long as you can connect to the internet, you can connect to your
+ inventory. </h4>
   </div>
 </div>
 
