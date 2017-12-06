@@ -34,6 +34,11 @@
   color: #ee5f5b;
 }
 
+img.logo {
+  max-width: 25%;
+  height: auto;
+}
+
 .jumbo-main {
   margin: 0 auto;
   background-image: url("https://www.handshake.com/blog/wp-content/uploads/2015/07/inventory-management-techniques-1024x579.jpg");
