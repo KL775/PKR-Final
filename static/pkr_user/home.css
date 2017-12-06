@@ -8,10 +8,6 @@
   width: 100%;
 }
 
-#info{
-
-}
-
 .auth-btn {
   background-color: #4CAF50;
   color: white;
@@ -28,7 +24,13 @@
   padding: 2rem 1rem;
   margin-bottom: 2rem;
   background-color: #1c1e22;
-  border-radius: 0.3rem;
+  border-radius: 0.2rem;
+}
+
+#welcome-banner {
+  border: 1px solid rgba(0, 0, 0, 0.6);
+  border-color: #ee5f5b;
+  color: #ee5f5b;
 }
 
 .jumbo-main {
@@ -72,4 +74,8 @@ body {
   color: #aaa;
   text-align: left;
   background-color: #272B30;
+}
+
+ul {
+  list-style-type: circle;
 }
