@@ -10,6 +10,7 @@ from django.contrib.auth.decorators import login_required
 from django.utils import timezone
 from django.http import JsonResponse
 import uuid
+import csv
 
 def home(request):
     return render(request, 'pkr_user/home.html')
@@ -70,6 +71,7 @@ def user_logout(request):
     logout(request)
     return HttpResponseRedirect(reverse('home'))
 
+@login_required
 def items(request): # GET endpoint should work in dashboard.html
     #query db to get table of (itemID, itemName) tuples
     current_user = request.user
@@ -84,19 +86,21 @@ def items(request): # GET endpoint should work in dashboard.html
     else:
         return JsonResponse({"arr": [{}]})
 
+@login_required
 def items_request(request):
     current_user = request.user
     product_code = request.META['QUERY_STRING'].split("=")[1]
     product = models.Product.objects.get(productCode=product_code)
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename="data.csv"'
+    print(response)
+    writer = csv.writer(response)
+    writer.writerow(['dateRecord', 'quantity'])
     if request.user.is_authenticated():
         profile = models.UserProfile.objects.values_list('customerNumber').get(user=current_user)
         curr_customer = models.Customer.objects.get(customerNumber=profile[0])
         print(curr_customer)
         stocks = models.Stock.objects.values_list('productCode', 'dateRecord', 'quantity').filter(customerNumber=curr_customer, productCode=product)
-        out = []
-        print(stocks)
         for item in stocks:
-            out.append({ "date": item[1], "quantity" : item[2]})
-        return JsonResponse({"arr": out})
-    else:
-        return JsonResponse({"arr": [{}]})
+            writer.writerow([item[1], item[2]])
+    return response
