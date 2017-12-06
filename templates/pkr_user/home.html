@@ -7,12 +7,15 @@
 {% block body_block %}
 <div class="container">
   <div class="jumbotron">
-    <h2>PKR - Inventory Management</h2>
-    {% if user.is_authenticated %}
-        <h3>Welcome {{ user.username }}!</h3>
-    {% else %}
-        <h3>Welcome to the site!</h3>
-    {% endif %}
+    <center>
+        <h1>PKR</h1>
+        <h2>Simplying Inventory Management</h2>
+    	{% if user.is_authenticated %}
+        	<h3>Welcome {{ user.username }}!</h3>
+    	{% else %}
+        	<h3>Register now to see how PKR can help your business.</h3>
+    	{% endif %}
+    </center>
   </div>
 </div>
 
