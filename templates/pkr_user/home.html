@@ -1,9 +1,5 @@
 {% extends "pkr_user/base.html" %}
 {% load staticfiles %}
-{% block links %}
-<link rel = "stylesheet" href="{% static "pkr_user/home.css" %}"/>
-{% endblock %}
-
 {% block body_block %}
 <div class="container">
   <div class="jumbotron" id="welcome-banner">
@@ -17,8 +13,7 @@
   </div>
   <div class="jumbotron">
     <center>
-  	{% load static %}
-  	<img src="{% static "pkr_user/logo.png" %}" class = "logo" alt="logo" />
+        <img src="{% static "pkr_user/logo.png" %}" class = "logo" alt="logo" />
         <!--<h1>PKR</h1>-->
         <h2>Inventory Management Made Simple</h2>
     </center>
