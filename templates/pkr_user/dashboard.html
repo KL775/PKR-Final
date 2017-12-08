@@ -110,9 +110,13 @@
                 .call(yAxis);
 
         });
-    console.log(id)
   }
-  console.log("ok")
+  d3.select("#links")
+    .on("click", function(e){
+      d3.event.stopPropagation()
+      d3.select("#regulations")
+        classed("none", d3.select(this).classed("none") ? false : true);
+    })
   window.addEventListener('load', e => getItems()); // get list when page is loaded
 </script>
 {% endblock %}
@@ -128,8 +132,15 @@
     <div>Placeholder</div>
   </div>
   <div id="chartContainer" class="col-md-8">
-    <h1 id= "#product">Click a product to begin!</div>
+    <h2 id= "#product">Click a product to begin!</div>
     <div id="chartDiv"></div>
+  </div>
+  <div class = "container content row">
+    <h4 id = "links">Quick Links</h4>
+    <ol id = "#regulations" class = "none">
+      <li><a href = "https://www1.nyc.gov/assets/doh/downloads/pdf/rii/fpc-manual.pdf">FPC Manual</a></li>
+      <li><a href = "https://www1.nyc.gov/assets/doh/downloads/pdf/rii/ri-violation-penalty.pdf">Health Inspections Rules</a></li>
+    </ol>
   </div>
 </div>
 {% endblock %}

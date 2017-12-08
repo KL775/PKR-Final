@@ -30,6 +30,10 @@ h2{
   animation: fadein 1s 50ms linear forwards;
 }
 
+.none{
+  display:none;
+}
+
 @keyframes fadein{
   0% {
     opacity: 0;
