@@ -30,6 +30,10 @@ h2{
   animation: fadein 1s 50ms linear forwards;
 }
 
+ol ul{
+  float:left;
+}
+
 .none{
   display:none;
 }
