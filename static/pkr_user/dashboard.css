@@ -1,5 +1,7 @@
 #chartContainer svg{
   border: 1px solid steelblue;
+  opacity: 0;
+  animation: fadein 2s 50ms linear forwards;
 }
 
 path {
@@ -20,4 +22,28 @@ path {
   stroke: #f1f1f1;
   fill: none;
   stroke-width: 0.5;
+}
+
+h2{
+  margin-top: 0;
+  opacity: 0;
+  animation: fadein 1s 50ms linear forwards;
+}
+
+@keyframes fadein{
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeout{
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
 }

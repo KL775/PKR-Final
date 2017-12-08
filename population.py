@@ -13,7 +13,7 @@ from datetime import date, timedelta
 
 fakegen = Faker()
 productLine = ['Vegetables', 'Liquids', 'Condiments', 'Processed', 'Meats']
-productName = ['Heinz Ketchup 42 oz', 'Kikkoman Soysauce', 'Banana', 'Apple', 'McMuffin', '6 foot Sub']
+productName = ['Ice Cream' , 'Iceberg Lettuce', 'Strawberries', 'Glutinous Rice']
 def add_productLine():
     t = models.ProductLine.objects.get_or_create(productLine=random.choice(productLine))[0]
     t.save()
@@ -35,24 +35,23 @@ def createProducts():
                                              MSRP=MSRP,
                                              customerNumber=customer)[0]
     new.save()
+    createStocks(customer, new)
 
-def createStocks(stocks=5):
+def createStocks(customer, product):
     productCode = models.Product.objects.values_list('productCode', 'customerNumber').order_by('?').first()
-    newproductCode = models.Product.objects.get(customerNumber=productCode[1], productCode=productCode[0])
-    customer = models.Customer.objects.get(customerNumber=productCode[1])
-    fake_date = date.today() - timedelta(days=3)
-    quantityInStock = fakegen.pyint()
-    print(customer)
-    print(productCode)
-    new = models.Stock.objects.get_or_create(productCode=newproductCode, dateRecord=fake_date, quantity=quantityInStock, customerNumber=customer)[0]
-    new.save()
+    newproductCode = models.Product.objects.get(customerNumber=customer, productCode=product)
+    for day in range(21):
+        fake_date = date.today() - timedelta(days=day)
+        quantityInStock = fakegen.pyint()
+        new = models.Stock.objects.get_or_create(productCode=newproductCode, dateRecord=fake_date, quantity=quantityInStock, customerNumber=customer)[0]
+        new.save()
 
 if __name__ == '__main__':
     # p = models.Product.objects.values_list('productCode', 'customerNumber').order_by('?').first()
     # c = models.Customer.objects.get(customerNumber=p[1])
     # stock = models.Stock.objects.get(productCode=p, customerNumber=c)
-     print("Populating product lines!")
-     for n in range(20):
+    # print("Populating product lines!")
+    for n in range(50):
         createProducts()
-        createStocks()
-     print("Populating product lines complete!!")
+    #createStocks()
+    #print("Populating product lines complete!!")

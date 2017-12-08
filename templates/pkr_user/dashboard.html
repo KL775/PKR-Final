@@ -22,11 +22,11 @@
 
       items.arr.forEach((item) => {                    // for each item returned, make a div to be added to the sidebar
         var row = document.createElement("div");
-        row.id = item.id;
+        row.id = "p"+item.id;
         row.classList.add("itemRow");
         row.appendChild(document.createTextNode(item.name));
         row.href = "#";
-        row.addEventListener('click', e => loadChart(parseInt(row.id, 10))); // when div clicked, connect to server to get information needed to build chart
+        row.addEventListener('click', e => loadChart(parseInt(item.id, 10))); // when div clicked, connect to server to get information needed to build chart
 
         link = document.createElement("a")
         link.appendChild(row)
@@ -68,6 +68,11 @@
             .y(function(d) { return y(d.quantity); });
 
         // Adds the svg canvas
+        console.log(id)
+        var text = d3.select("#p"+id).text()
+        var header = d3.select("#chartContainer")
+            .append("h2")
+                .text(text)
         var svg = d3.select("#chartContainer")
             .append("svg")
                 .attr("width", width + margin.left + margin.right)
@@ -123,6 +128,7 @@
     <div>Placeholder</div>
   </div>
   <div id="chartContainer" class="col-md-8">
+    <h1 id= "#product">Click a product to begin!</div>
     <div id="chartDiv"></div>
   </div>
 </div>
