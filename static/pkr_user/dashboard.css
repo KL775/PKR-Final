@@ -1,7 +1,7 @@
 #chartContainer svg{
   border: 1px solid steelblue;
   opacity: 0;
-  animation: fadein 2s 50ms linear forwards;
+  animation: fadein .4s 50ms linear forwards;
 }
 
 path {
@@ -23,12 +23,6 @@ path {
   fill: none;
   stroke-width: 0.5;
 
-}
-
-h2{
-  margin-top: 0;
-  opacity: 0;
-  animation: fadein 1s 50ms linear forwards;
 }
 
 ol ul{
@@ -62,4 +56,14 @@ ol ul{
   list-style-type: none;
   margin-left: 10px;
   margin-right: 0px;
+}
+
+#error{
+  color: #ee5f5b;
+  margin-bottom: 0;
+}
+
+#dataTable{
+  opacity: 0;
+  animation: fadein 0.4s 50ms linear forwards;
 }

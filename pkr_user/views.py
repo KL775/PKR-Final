@@ -9,6 +9,7 @@ from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
 from django.utils import timezone
 from django.http import JsonResponse
+from django.contrib import messages
 import uuid
 import csv
 
@@ -18,18 +19,25 @@ def home(request):
 @login_required
 def dashboard(request):
     product_form = forms.ProductForm
-    return render(request, 'pkr_user/dashboard.html', {"product_form" : product_form})
+    stock_form = forms.StockForm
+    error = messages.get_messages(request)
+    return render(request, 'pkr_user/dashboard.html', {"product_form" : product_form, "stock_form" : stock_form, "error" : error})
 
 @login_required
 def add_product(request):
     current_user = request.user
     product_form = forms.ProductForm(data=request.POST)
+    stock_form = forms.StockForm(data=request.POST)
     profile = models.UserProfile.objects.values_list('customerNumber').get(user=current_user)
     curr_customer = models.Customer.objects.get(customerNumber=profile[0])
-    if product_form.is_valid():
+    if product_form.is_valid() and stock_form.is_valid():
         product = product_form.save()
         product.customerNumber = curr_customer
         product.save()
+        stock = models.Stock.objects.get_or_create(productCode=product, dateRecord=timezone.now(), quantity=0, customerNumber=curr_customer)[0]
+        print(stock_form.cleaned_data['quantity'])
+        stock.quantity = stock_form.cleaned_data['quantity']
+        stock.save()
     else:
         print(product_form.errors)
     return HttpResponseRedirect(reverse('dashboard'))
@@ -42,13 +50,14 @@ def update_stock(request):
     if request.method == 'POST':
         quantity = request.POST.get('quantity')
         print(request.POST.get('id'))
-        product_id = models.Product.objects.get(productCode=request.POST.get('id'))
+        product_id = models.Product.objects.values_list('productCode', 'productName').get(productCode=request.POST.get('id'))
         #timezone.now()
         try:
-            exist_stock = models.Stock.objects.get(customerNumber=curr_customer, productCode=product_id, dateRecord=timezone.now())
-            return HttpResponseRedirect(reverse('dashboard'), {"error": "You cannot update again today."})
+            exist_stock = models.Stock.objects.get(customerNumber=curr_customer, productCode=product_id[0], dateRecord=timezone.now())
+            messages.add_message(request, messages.INFO, 'You cannot update ' + product_id[1] + ' again today.')
+            return HttpResponseRedirect(reverse('dashboard'))
         except:
-            new = models.Stock.objects.get_or_create(productCode=product_id, dateRecord=timezone.now(), quantity=quantity, customerNumber=curr_customer)[0]
+            new = models.Stock.objects.get_or_create(productCode=product_id[0], dateRecord=timezone.now(), quantity=quantity, customerNumber=curr_customer)[0]
             new.save()
     return HttpResponseRedirect(reverse('dashboard'))
 

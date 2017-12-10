@@ -40,7 +40,6 @@ class Product(models.Model):
     productLine = models.ForeignKey(ProductLine)
     productScale = models.CharField(max_length=128, null=True, blank=True)
     productDescription = models.TextField(blank=True, null=True)
-    quantityInStock = models.IntegerField()
     buyPrice = models.FloatField()
     MSRP = models.FloatField(blank=True, null=True)
     customerNumber = models.ForeignKey(Customer, null=True, default='')

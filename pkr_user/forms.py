@@ -35,3 +35,8 @@ class ProductForm(forms.ModelForm):
             "MSRP" : "Retail Price",
         }
         exclude = ('productScale', 'productDescription', 'customerNumber')
+
+class StockForm(forms.ModelForm):
+    class Meta():
+        model = models.Stock
+        exclude = ('productCode', 'customerNumber', 'dateRecord')
