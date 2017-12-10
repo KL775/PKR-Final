@@ -50,14 +50,14 @@ def update_stock(request):
     if request.method == 'POST':
         quantity = request.POST.get('quantity')
         print(request.POST.get('id'))
-        product_id = models.Product.objects.values_list('productCode', 'productName').get(productCode=request.POST.get('id'))
+        product_id = models.Product.objects.get(productCode=request.POST.get('id'))
         #timezone.now()
         try:
             exist_stock = models.Stock.objects.get(customerNumber=curr_customer, productCode=product_id[0], dateRecord=timezone.now())
-            messages.add_message(request, messages.INFO, 'You cannot update ' + product_id[1] + ' again today.')
+            messages.add_message(request, messages.INFO, 'You cannot update ' + product_id + ' again today.')
             return HttpResponseRedirect(reverse('dashboard'))
         except:
-            new = models.Stock.objects.get_or_create(productCode=product_id[0], dateRecord=timezone.now(), quantity=quantity, customerNumber=curr_customer)[0]
+            new = models.Stock.objects.get_or_create(productCode=product_id, dateRecord=timezone.now(), quantity=quantity, customerNumber=curr_customer)[0]
             new.save()
     return HttpResponseRedirect(reverse('dashboard'))
 
