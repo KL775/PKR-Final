@@ -15,8 +15,42 @@ import csv
 def home(request):
     return render(request, 'pkr_user/home.html')
 
+@login_required
 def dashboard(request):
-    return render(request, 'pkr_user/dashboard.html')
+    product_form = forms.ProductForm
+    return render(request, 'pkr_user/dashboard.html', {"product_form" : product_form})
+
+@login_required
+def add_product(request):
+    current_user = request.user
+    product_form = forms.ProductForm(data=request.POST)
+    profile = models.UserProfile.objects.values_list('customerNumber').get(user=current_user)
+    curr_customer = models.Customer.objects.get(customerNumber=profile[0])
+    if product_form.is_valid():
+        product = product_form.save()
+        product.customerNumber = curr_customer
+        product.save()
+    else:
+        print(product_form.errors)
+    return HttpResponseRedirect(reverse('dashboard'))
+
+def update_stock(request):
+    print("Updating Stock!")
+    current_user = request.user
+    profile = models.UserProfile.objects.values_list('customerNumber').get(user=current_user)
+    curr_customer = models.Customer.objects.get(customerNumber=profile[0])
+    if request.method == 'POST':
+        quantity = request.POST.get('quantity')
+        print(request.POST.get('id'))
+        product_id = models.Product.objects.get(productCode=request.POST.get('id'))
+        #timezone.now()
+        try:
+            exist_stock = models.Stock.objects.get(customerNumber=curr_customer, productCode=product_id, dateRecord=timezone.now())
+            return HttpResponseRedirect(reverse('dashboard'), {"error": "You cannot update again today."})
+        except:
+            new = models.Stock.objects.get_or_create(productCode=product_id, dateRecord=timezone.now(), quantity=quantity, customerNumber=curr_customer)[0]
+            new.save()
+    return HttpResponseRedirect(reverse('dashboard'))
 
 def register(request):
     registered = False
@@ -95,7 +129,7 @@ def items_request(request):
     if request.user.is_authenticated():
         profile = models.UserProfile.objects.values_list('customerNumber').get(user=current_user)
         curr_customer = models.Customer.objects.get(customerNumber=profile[0])
-        stocks = models.Stock.objects.values_list('productCode', 'dateRecord', 'quantity').filter(customerNumber=curr_customer, productCode=product)
+        stocks = models.Stock.objects.values_list('productCode', 'dateRecord', 'quantity').filter(customerNumber=curr_customer, productCode=product).order_by('dateRecord')
         for item in stocks:
             output.append({"dateRecord": item[1], "quantity": item[2]})
             #writer.writerow([item[1], item[2]])

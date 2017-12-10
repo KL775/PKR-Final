@@ -19,7 +19,6 @@
 
           {# Django Home Link / Admin Link / Register Link#}
           <li><a class="navbar-brand" href="{% url 'home' %}">PKR</a></li>
-          <li><a class="navbar-link" href="{% url 'admin:index' %}">Admin</a></li>
           {% if user.is_authenticated %}
             <li><a href="{% url 'dashboard' %}">Dashboard</a></li>
             <li><a href="{% url 'logout' %}">Logout</a></li>

@@ -1,8 +1,9 @@
 {% extends 'pkr_user/base.html' %}
 {% load staticfiles %}
-
+{% load widget_tweaks %}
 {% block links %}
 <link rel = "stylesheet" href="{% static "pkr_user/dashboard.css" %}"/>
+<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
 {% endblock %}
 
 {% block script_block %}
@@ -17,18 +18,27 @@
     .then(res => res.json())
     .then(items => {
       var list = document.getElementById("itemsContainer") // clear out the list if it exists already
+
+      var select = document.getElementById("update_select")
       while (list.firstChild)
         list.removeChild(list.firstChild);
+      while (select.firstChild)
+        select.removeChild(select.firstChild);
 
       items.arr.forEach((item) => {                    // for each item returned, make a div to be added to the sidebar
         var row = document.createElement("div");
+        var option = document.createElement("option")
+
         row.id = "p"+item.id;
+        option.setAttribute("value", item.id)
         row.classList.add("itemRow");
         row.appendChild(document.createTextNode(item.name));
+        option.appendChild(document.createTextNode(item.name));
         row.href = "#";
         row.addEventListener('click', e => loadChart(parseInt(item.id, 10))); // when div clicked, connect to server to get information needed to build chart
 
         link = document.createElement("a")
+        select.appendChild(option)
         link.appendChild(row)
         list.appendChild(link)
       });
@@ -44,9 +54,9 @@
       var list = document.getElementById("chartContainer") // clear out the list if it exists already
       while (list.firstChild)
         list.removeChild(list.firstChild);
-        var margin = {top: 30, right: 20, bottom: 30, left: 50},
-            width = 600 - margin.left - margin.right,
-            height = 270 - margin.top - margin.bottom;
+        var margin = {top: 50, right: 50, bottom: 50, left: 60},
+            width = 800 - margin.left - margin.right,
+            height = 300 - margin.top - margin.bottom;
 
         // Parse the date / time
         var parseDate = d3.time.format("%Y-%m-%d").parse;
@@ -68,7 +78,6 @@
             .y(function(d) { return y(d.quantity); });
 
         // Adds the svg canvas
-        console.log(id)
         var text = d3.select("#p"+id).text()
         var header = d3.select("#chartContainer")
             .append("h2")
@@ -88,11 +97,11 @@
                 d.dateRecord = parseDate(d.dateRecord);
                 d.quantity = +d.quantity;
             });
-
+        console.log(data)
             // Scale the range of the data
+            range = d3.extent(data, function(d) { return d.quantity; })
             x.domain(d3.extent(data, function(d) { return d.dateRecord; }));
             y.domain([0, d3.max(data, function(d) { return d.quantity; })]);
-
             // Add the valueline path.
             svg.append("path")
                 .attr("class", "line")
@@ -110,6 +119,7 @@
                 .call(yAxis);
 
         });
+
   }
   d3.select("#links")
     .on("click", function(e){
@@ -124,12 +134,15 @@
 {% block body_block %}
 <div class="container content row">
   <h1 style="margin-left: auto;">Dashboard</h1>
+    <button class="btn btn-primary" data-toggle="modal" data-target="#addProductForm">New</button>
+    <button class="btn btn-primary" data-toggle="modal" data-target="#addUpdateForm">Update Stock</button>
   <div style="text-align:center; position: relative; max-width:384px; margin: 0 auto;">
     <div style="border-left: 1px solid #eee; width: 1px; position: absolute; left: 45px; height: 100%;"></div>
   </div>
   <br>
-  <div id="itemsContainer" class="col-md-3">
-    <div>Placeholder</div>
+  <div class="col-md-3">
+    <div id="itemsContainer"></div>
+    <div></div>
   </div>
   <div id="chartContainer" class="col-md-8">
     <h2 id= "#product">Click a product to begin!</div>
@@ -138,9 +151,67 @@
   <div class = "container content row">
     <h4 id = "links">Quick Links</h4>
     <ol id = "#regulations">
-      <li><a href = "https://www1.nyc.gov/assets/doh/downloads/pdf/rii/fpc-manual.pdf">FPC Manual</a></li>
-      <li><a href = "https://www1.nyc.gov/assets/doh/downloads/pdf/rii/ri-violation-penalty.pdf">Health Inspections Rules</a></li>
+      <li><a href = "https://www1.nyc.gov/assets/doh/downloads/pdf/rii/fpc-manual.pdf" target="_blank">FPC Manual</a></li>
+      <li><a href = "https://www1.nyc.gov/assets/doh/downloads/pdf/rii/ri-violation-penalty.pdf" target="_blank">Health Inspections Rules</a></li>
     </ol>
+  </div>
+</div>
+
+<div id="addProductForm" class="modal fade" role="dialog" data-backdrop="static" data-keyboard="false">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title" style="color:black">Add New Product</h4>
+      </div>
+      <div class="modal-body" style="color:black">
+        <form action="/add_product" method='POST' encType="multipart/form-data">
+          {% csrf_token %}
+          <div class = "container" style="width: 100%">
+          {% for field in product_form.visible_fields %}
+            <div class = "form-group">
+              {{ field.label_tag }}
+              {% render_field field class="form-control" %}
+            </div>
+          {% endfor %}
+          <input type="submit" name="" class = "btn btn-default" value="Add Product">
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="addUpdateForm" class="modal fade" role="dialog" data-backdrop="static" data-keyboard="false">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title" style="color:black">Update Product</h4>
+      </div>
+      <div class="modal-body" style="color:black">
+        <form action="/update_stock" method='POST' encType="multipart/form-data">
+          {% csrf_token %}
+          <div class = "container" style="width=100%">
+            <div>
+              <select id="update_select" name='id'>
+                <!--<option value="volvo">Volvo</option>-->
+              </select>
+            </div>
+            <br>
+            <label for="quantity">Quantity </label>
+            <input type="text" name="quantity">
+            <input type="submit" name="" class = "btn btn-default" value="Update Product">
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
   </div>
 </div>
 {% endblock %}
