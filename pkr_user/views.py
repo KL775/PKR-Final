@@ -49,16 +49,17 @@ def update_stock(request):
     curr_customer = models.Customer.objects.get(customerNumber=profile[0])
     if request.method == 'POST':
         quantity = request.POST.get('quantity')
-        print(request.POST.get('id'))
         product_id = models.Product.objects.get(productCode=request.POST.get('id'))
-        #timezone.now()
+        product_name = models.Product.objects.values_list('productName').get(productCode=request.POST.get('id'))
         try:
-            exist_stock = models.Stock.objects.get(customerNumber=curr_customer, productCode=product_id[0], dateRecord=timezone.now())
-            messages.add_message(request, messages.INFO, 'You cannot update ' + product_id + ' again today.')
+            exist_stock = models.Stock.objects.get(customerNumber=curr_customer, productCode=product_id, dateRecord=timezone.now())
+            print(product_name)
+            messages.add_message(request, messages.INFO, 'You cannot update ' + product_name[0] + ' again today.')
             return HttpResponseRedirect(reverse('dashboard'))
-        except:
+        except models.Stock.DoesNotExist:
             new = models.Stock.objects.get_or_create(productCode=product_id, dateRecord=timezone.now(), quantity=quantity, customerNumber=curr_customer)[0]
             new.save()
+    print("End Path!")
     return HttpResponseRedirect(reverse('dashboard'))
 
 def register(request):
