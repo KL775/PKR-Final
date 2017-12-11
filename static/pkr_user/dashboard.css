@@ -1,5 +1,7 @@
 #chartContainer svg{
   border: 1px solid steelblue;
+  opacity: 0;
+  animation: fadein .4s 50ms linear forwards;
 }
 
 path {
@@ -20,4 +22,55 @@ path {
   stroke: #f1f1f1;
   fill: none;
   stroke-width: 0.5;
+
+}
+
+ol ul{
+  float:left;
+}
+
+.none{
+  display:none;
+}
+
+@keyframes fadein{
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeout{
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+#actions li{
+  float:left;
+  list-style-type: none;
+  margin-left: 10px;
+  margin-right: 0px;
+}
+
+#error{
+  color: #ee5f5b;
+  margin-bottom: 0;
+}
+
+#dataTable{
+  opacity: 0;
+  animation: fadein 0.4s 50ms linear forwards;
+}
+
+
+h2{
+  margin-top: 0;
+  opacity: 0;
+  animation: fadein 0.4s 50ms linear forwards;
 }

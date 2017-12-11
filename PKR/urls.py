@@ -25,4 +25,6 @@ urlpatterns = [
     url(r'^dashboard/', user_views.dashboard, name = 'dashboard'),
     url(r'^items/', user_views.items, name='item'),
     url(r'^request_items/', user_views.items_request, name='item_request'),
+    url(r'^add_product', user_views.add_product, name= 'add_product'),
+    url(r'^update_stock', user_views.update_stock, name = 'update_stock'),
 ]

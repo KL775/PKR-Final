@@ -9,7 +9,7 @@
       {% else %}
         <h2>Thanks for considering PKR!</h2>
         <form enctype="multipart/form-data" method="POST">
-          {% csrf_token %}
+        {% csrf_token %}
         <div class = "container">
         {% for field in user_form.visible_fields %}
           <div class = "form-group">
