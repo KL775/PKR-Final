@@ -28,10 +28,10 @@
 }
 
 #welcome-banner {
-  -webkit-box-shadow:inset 0px 0px 0px 1px #ee5f5b;
-  -moz-box-shadow:inset 0px 0px 0px 1px #ee5f5b;
-  box-shadow:inset 0px 0px 0px 1px #ee5f5b;
-  color: #ee5f5b;
+  -webkit-box-shadow:inset 0px 0px 0px 1px #62c462;
+  -moz-box-shadow:inset 0px 0px 0px 1px #62c462;
+  box-shadow:inset 0px 0px 0px 1px #62c462;
+  color: #62c462;
 }
 
 img.logo {
